@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: inventory
+    service: inventory
+  name: inventory
+  namespace: dev2
+spec:
+  ports:
+    - name: tcp-8082-8082-inventory
+      protocol: TCP
+      port: 8082
+      targetPort: 8082
+  selector:
+    app: hello-client
+  type: ClusterIP
+  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory
+spec:
+  selector:
+    matchLabels:
+      app: inventory
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: inventory
+    spec:
+      containers:
+        - name: inventory
+          image: gcr.io/t-operative-348503/inventory:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8082
+          env:
+           - name: SPRING_PROFILES_ACTIVE
+             value: "dev2"
