@@ -12,6 +12,10 @@ eureka:
   client:
     service-url:
       defaultZone: http://eureka-service:8070/eureka
+      
+hello-server:
+     ribbon:
+       listOfServers: http://hello-server:8071
 
 hystrix:
   command:
